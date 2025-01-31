@@ -50,3 +50,4 @@ export default tseslint.config({
 ```
 # vite-react-tailwindcss-shadcn-project-starter
 # react-tanstack-shadcdn-Auth
+# dilaer

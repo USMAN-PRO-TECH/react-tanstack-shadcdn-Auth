@@ -4,9 +4,8 @@ import Layout from '@/layout';
 
 export const Route = createFileRoute("/_private")({
   beforeLoad: async ({ context, location }) => {
-    console.log("context.authStore()", context);
-    
-    if (!context.authStore.isAuthenticated) {
+    const isAuthenticated = context.authStore.isAuthenticated;
+    if (!isAuthenticated) {
       console.log("Redirecting to login...");
       throw redirect({
         to: "/login",

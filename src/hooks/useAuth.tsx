@@ -13,3 +13,4 @@ export const useAuth = () => {
 
   return { user, isLoading, isAuthenticated, login, logout };
 };
+export type AuthState = ReturnType<typeof useAuth>;
