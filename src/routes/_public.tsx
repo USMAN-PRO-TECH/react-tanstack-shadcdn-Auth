@@ -1,22 +1,23 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { RouterContext } from '@/types/routerContext' 
-import Layout from '@/layout'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+import { RouterContext } from '@/types/routerContext';
+
 
 export const Route = createFileRoute('/_public')({
   beforeLoad: async ({ context, location }) => {
-    const authStore = context.authStore as RouterContext['authStore']
+    const authStore = context.authStore as RouterContext['authStore'];
 
-    if (!authStore.isAuthenticated) {
-      console.log('Redirecting to login...')
+    if (!authStore.isHydrated) {
+      return;
+    }
+
+    if (authStore.isAuthenticated) {
       throw redirect({
-        to: '/login',
-        search: { redirect: location.href },
-      })
+        to: '/',
+        search: { redirect: location.pathname },
+      });
     }
   },
   component: () => (
-    <Layout>
       <Outlet />
-    </Layout>
   ),
-})
+});

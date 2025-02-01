@@ -4,7 +4,6 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/query";
 import { useAuthStore } from "@/stores/authStore";
 import { RouterContext } from "@/types/routerContext";
-import { useEffect } from "react";
 import { useState } from "react";
 
 const createAppRouter = (authStore: RouterContext["authStore"]) =>
@@ -23,11 +22,13 @@ declare module "@tanstack/react-router" {
 
 function InnerApp() {
   const authStore = useAuthStore();
-  const [router, setRouter] = useState(() => createAppRouter(authStore));
+  console.log('InnerApp render', { 
+    isAuthenticated: authStore.isAuthenticated, 
+    isHydrated: authStore.isHydrated 
+  });
+  
+  const [router] = useState(() => createAppRouter(authStore));
 
-  useEffect(() => {
-    setRouter(createAppRouter(authStore));
-  }, [authStore]);
   return (
     <RouterProvider router={router} context={{ authStore, queryClient }} />
   );
