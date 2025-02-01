@@ -1,7 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
-interface AuthState {
+import { persist, createJSONStorage } from 'zustand/middleware';
+export interface AuthState {
   isAuthenticated: boolean;
   login: () => void;
   logout: () => void;
@@ -15,8 +14,10 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ isAuthenticated: false }),
     }),
     {
-      name: 'auth', // The name of th   e item in storage (must be unique)
-      partialize: (state) => ({ isAuthenticated: state.isAuthenticated }), // Persist only the isAuthenticated state
+      name: 'auth',
+      storage: createJSONStorage(() => sessionStorage), 
+      partialize: (state) => ({ isAuthenticated: state.isAuthenticated }), 
     }
   )
 );
+export type Auth = ReturnType<typeof useAuthStore>;

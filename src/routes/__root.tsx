@@ -2,8 +2,8 @@
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { ThemeProvider } from "@/components/theme-provider";
 import React from "react";
-import { AuthState } from "@/hooks/useAuth";
 import { QueryClient } from "@tanstack/react-query";
+import { Auth } from "@/stores/authStore";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -13,10 +13,18 @@ const TanStackRouterDevtools =
           default: res.TanStackRouterDevtools,
         }))
       );
+const TanStackQueryDevtools =
+  process.env.NODE_ENV === "production"
+    ? () => null
+    : React.lazy(() =>
+        import("@tanstack/react-query-devtools").then((res) => ({
+          default: res.ReactQueryDevtools,
+        }))
+      );
 
 type RootRouteContext = {
   queryClient: QueryClient;
-  authStore: AuthState;
+  authStore: Auth;
 };
 
 export const Route = createRootRouteWithContext<RootRouteContext>()({
@@ -24,6 +32,7 @@ export const Route = createRootRouteWithContext<RootRouteContext>()({
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <Outlet />
       <TanStackRouterDevtools position="bottom-left" />
+      <TanStackQueryDevtools />
     </ThemeProvider>
   ),
 });
